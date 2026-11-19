@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>History - ExcelPro</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="main-content">
+        <h1>Processing History</h1>
+        <p>View your previously processed Excel files.</p>
+
+        <br>
+
+        {% if history %}
+            {% for item in history %}
+                <div class="stat-card">
+                    <h3>{{ item.filename }}</h3>
+                    <p>{{ item.date }}</p>
+
+                    {% for file in item.files %}
+                        <p>
+                            <a href="{{ url_for('download_file', filename=file) }}">
+                                Download {{ file }}
+                            </a>
+                        </p>
+                    {% endfor %}
+                </div>
+                <br>
+            {% endfor %}
+        {% else %}
+            <p>No processing history available yet.</p>
+        {% endif %}
+
+        <br>
+        <a href="/">← Back to Dashboard</a>
+    </main>
+</body>
+</html>

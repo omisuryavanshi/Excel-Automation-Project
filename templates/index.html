@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExcelPro - Automation Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">E</div>
+            <span>ExcelPro</span>
+        </div>
+
+        <p class="menu-heading">MENU</p>
+
+      <nav>
+    <a href="/" class="nav-link active">▦ Dashboard</a>
+
+    <a href="/#upload" class="nav-link">
+        ▤ Excel Automation
+    </a>
+
+    <a href="/history" class="nav-link">
+        ◷ History
+    </a>
+
+    <a href="/settings" class="nav-link">
+        ⚙ Settings
+    </a>
+</nav>
+
+        <div class="sidebar-bottom">
+            <div class="help-card">
+                <strong>Need help?</strong>
+                <p>Contact our support team.</p>
+                <a href="mailto:support@example.com">Get support →</a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="welcome">Welcome back 👋</p>
+                <h1>Dashboard</h1>
+            </div>
+
+            <div class="profile">
+                <div class="avatar">O</div>
+                <div>
+                    <strong>Omi</strong>
+                    <small>Admin</small>
+                </div>
+            </div>
+        </header>
+
+        <section class="intro">
+            <div>
+                <h2>Automate your Excel work</h2>
+                <p>Clean data, generate reports and save valuable time.</p>
+            </div>
+            <span class="status">● System Ready</span>
+        </section>
+
+        <!-- Statistics -->
+       
+<section class="stats">
+
+    <div class="stat-card">
+        <span>Total Revenue</span>
+        <h2>₹{{ "{:,.2f}".format(total_revenue) if total_revenue is defined else "0.00" }}</h2>
+        <p>Revenue from uploaded file</p>
+    </div>
+
+    <div class="stat-card">
+        <span>Products Sold</span>
+        <h2>{{ total_quantity if total_quantity is defined else 0 }}</h2>
+        <p>Total quantity sold</p>
+    </div>
+
+    <div class="stat-card">
+        <span>Unique Customers</span>
+        <h2>{{ total_customers if total_customers is defined else 0 }}</h2>
+        <p>Customers in uploaded file</p>
+    </div>
+
+</section>
+
+{% if best_product is defined %}
+<div class="stat-card">
+    <span>Best Selling Product</span>
+    <h2>{{ best_product }}</h2>
+    <p>Based on total quantity sold</p>
+</div>
+{% endif %}
+
+
+        
+<section class="upload-section" id="upload">
+
+    <div class="section-heading">
+        <div>
+            <h2>Upload your Excel file</h2>
+            <p>Upload your sales data to generate reports.</p>
+        </div>
+        <span class="file-type">XLSX FILE</span>
+    </div>
+
+    <form action="/process" method="POST"
+          enctype="multipart/form-data">
+
+        <div class="upload-box">
+
+            <div class="upload-icon">↑</div>
+
+            <h3>Select your Excel file</h3>
+            <p>Choose an Excel file from your computer.</p>
+
+            <input
+                type="file"
+                name="excel_file"
+                id="excelFile"
+                accept=".xlsx"
+                required
+            >
+
+            <label for="excelFile" class="choose-btn">
+                Choose Excel File
+            </label>
+
+            <p class="file-note" id="fileName">
+                Supported format: .xlsx
+            </p>
+
+        </div>
+
+        <button class="process-btn" type="submit">
+            Process Excel File →
+        </button>
+
+    </form>
+
+    {% if message %}
+        <p class="result-message">{{ message }}</p>
+    {% endif %}
+
+    {% if files %}
+        <div class="results">
+            <h2>Your Reports Are Ready!</h2>
+
+            {% for file in files %}
+                <p>
+                    {{ file.name }}
+                    <a href="{{ url_for('download_file', filename=file.name) }}">
+                        Download
+                    </a>
+                </p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+        </section>
+
+<script>
+    document.getElementById("excelFile").addEventListener("change", function() {
+        document.getElementById("fileName").textContent =
+            this.files.length ? this.files[0].name : "Supported format: .xlsx";
+    });
+</script>
+
+
+        <!-- Features -->
+        <section class="features">
+            <h2>What you can do</h2>
+
+            <div class="feature-grid">
+
+                <div class="feature-card">
+                    <div class="feature-icon">✦</div>
+                    <h3>Data Cleaning</h3>
+                    <p>Remove duplicate records and handle missing values.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">▤</div>
+                    <h3>Sales Reports</h3>
+                    <p>Generate product-wise sales reports automatically.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">↗</div>
+                    <h3>Business Summary</h3>
+                    <p>Get useful business metrics from your Excel data.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <footer>
+            © 2026 ExcelPro. Built with Python and Flask.
+        </footer>
+
+    </main>
+</div>
+
+</body>
+</html>
